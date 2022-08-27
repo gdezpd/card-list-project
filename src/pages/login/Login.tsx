@@ -1,60 +1,54 @@
 import React from 'react'
 
 import { CustomButton, CustomInput, FormBody, Title } from 'components'
-import { OptionValue } from 'enums'
+import { OptionValue, Path } from 'enums'
 import { useFormik } from 'formik'
 import { useAppDispatch } from 'hooks'
 import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
-import { selectorIsLoading, selectorIsLoginIn } from 'store'
-import { signInOnEmail } from 'store/thunk/loginThunk'
+import { Navigate, NavLink, useNavigate } from 'react-router-dom'
+import { selectorIsAuth, selectorIsLoading, selectorUserId } from 'store'
+import { authThunk } from 'store/thunk/loginThunk'
+import * as yup from 'yup'
 
 import style from './Login.module.sass'
 
-type FormikErrorType = {
-  email?: string
-  password?: string
-  rememberMe?: boolean
-}
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Please enter a valid email format !')
+    .required('Email is required please !'),
+  password: yup
+    .string()
+    .required('No password provided.')
+    .min(OptionValue.MinLengthPassword, 'Password is too short - 8 chars minimum.'),
+})
 
 export const Login = () => {
   const dispatch = useAppDispatch()
+
   const isLoading = useSelector(selectorIsLoading)
-  const isLogIn = useSelector(selectorIsLoginIn)
+  const isAuth = useSelector(selectorIsAuth)
+  const userId = useSelector(selectorUserId)
+
+  const navigate = useNavigate()
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
       rememberMe: false,
     },
-    validate: (values) => {
-      const errors: FormikErrorType = {}
-      if (!values.email && formik.handleBlur('email')) {
-        errors.email = 'Required'
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email) &&
-        formik.handleBlur('email')
-      ) {
-        errors.email = 'Invalid email address'
-      }
-      if (!values.password && formik.handleBlur('password')) {
-        errors.password = 'Required'
-      } else if (values.password.length < OptionValue.MinLengthPassword) {
-        errors.password = 'The field is required to fill in'
-      }
-      return errors
-    },
-
+    validationSchema: schema,
     onSubmit: (values) => {
-      dispatch(signInOnEmail(values))
+      dispatch(authThunk(values))
       formik.resetForm({
         values: { email: '', password: '', rememberMe: false },
       })
     },
   })
 
-  if (isLogIn) {
-    return <Navigate to={'/profile'} />
+  if (isAuth) {
+    navigate(`${Path.Profile}${Path.Root}${userId}`)
   }
 
   return (
@@ -85,9 +79,9 @@ export const Login = () => {
             Remember Me
           </label>
         </div>
-        <div className={style.forgotPassword}>
-          <a href={'/forgot'}> Forgot Password?</a>
-        </div>
+        <NavLink to={`${Path.Forgot}`}>
+          <div className={style.forgotPassword}>Forgot Password?</div>
+        </NavLink>
         <div className={style.buttonWrapper}>
           <CustomButton type="submit" color="primary" disabled={isLoading}>
             Sign In
@@ -97,7 +91,7 @@ export const Login = () => {
       <div>
         <p className={style.textBlockQuestion}>Already have an account?</p>
         <CustomButton type="button" color="link" disabled={isLoading}>
-          <a href="/registration"> Sign Up</a>
+          <NavLink to={`${Path.Register}`}>Sign Up</NavLink>
         </CustomButton>
       </div>
     </FormBody>

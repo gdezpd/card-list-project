@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Nullable } from 'types'
+import { ErrorMessageType } from 'types'
 
 export const initialState: InitialStateType = {
   isLoading: false,
-  isInitialized: false,
+  isInitialized: true,
   isAuth: false,
-  error: null,
+  error: { message: '' },
 }
 
 export const appSlice = createSlice({
@@ -15,28 +15,31 @@ export const appSlice = createSlice({
     isSpinAppLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload
     },
-    setErrorMessage: (state, action: PayloadAction<Nullable<string>>) => {
-      state.error = action.payload
+    removeErrorMessage: (state) => {
+      state.error = { message: '' }
     },
     setInitialized: (state, action: PayloadAction<boolean>) => {
       state.isInitialized = action.payload
+    },
+    setAuth: (state, action: PayloadAction<boolean>) => {
+      state.isAuth = action.payload
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
       (action) => action.type.endsWith('/rejected'),
       (state, action: PayloadAction<string>) => {
-        state.error = action.payload as string
+        state.error = { message: action.payload }
       }
     )
   },
 })
 
-export const { isSpinAppLoading, setErrorMessage, setInitialized } = appSlice.actions
+export const { isSpinAppLoading, removeErrorMessage, setInitialized, setAuth } = appSlice.actions
 
 type InitialStateType = {
   isLoading: boolean
   isInitialized: boolean
   isAuth: boolean
-  error: Nullable<string>
+  error: ErrorMessageType
 }
