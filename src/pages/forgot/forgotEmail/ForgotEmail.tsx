@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, memo } from 'react'
 
 import { CustomButton, CustomInput, FormBody, Title } from 'components'
 import { Path } from 'enums'
@@ -16,7 +16,7 @@ const name = 'Aliaksandr'
 
 const schema = yup.object().shape(createErrorSchema(['email']))
 
-export const ForgotEmail = React.memo(() => {
+export const ForgotEmail = memo(() => {
   const dispatch = useAppDispatch()
 
   const isLoading = useSelector(selectorIsLoading)

@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 
-import { CustomButton, Title } from 'components'
+import { CustomButton, Modal, Title } from 'components'
 
 import style from './TitleWithButton.module.sass'
 

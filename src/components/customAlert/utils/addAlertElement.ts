@@ -9,5 +9,6 @@ export const addAlertElement = (
   if (alerts) {
     return [...alerts, alert]
   }
+
   return [alert]
 }

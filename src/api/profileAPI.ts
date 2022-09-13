@@ -9,6 +9,7 @@ export const profileAPI = {
     const response = await API_CONFIG.post<any, AxiosResponse<UserResponseType>>(
       `${PathAPI.Auth}${PathAPI.Me}`
     )
+
     return response.data
   },
 
@@ -18,6 +19,7 @@ export const profileAPI = {
       AxiosResponse<UpdateUserResponseType>,
       ChangeInformationUserType
     >(`${PathAPI.Auth}${PathAPI.Me}`, payload)
+
     return response.data
   },
 }

@@ -56,7 +56,7 @@ export { IconCirclePointSVG } from 'components/iconSVG/iconCirclePointSVG/IconCi
 
 export { SortElement } from './sortElement/SortElement'
 
-export { CustomSliderByPack } from './customSliderByPack/CustomSliderByPack'
+export { FilterContainer } from './filterContainer/FilterContainer'
 
 export { Menu } from './menu/Menu'
 
@@ -73,3 +73,21 @@ export { TablePackList } from 'components/table/tablePackList/TablePackList'
 export { CustomAlert } from './customAlert/CustomAlert'
 
 export { Loader } from './loader/Loader'
+
+export { CustomCheckBox } from './customCheckBox/CustomCheckBox'
+
+export { TitleModal } from './titleModal/TitleModal'
+
+export { FormModalPackListGrope } from './formModalPackListGrope/FormModalPackListGrope'
+
+export { FormPackEditAndCreate } from './formPackEditAndCreate/FormPackEditAndCreate'
+
+export { FormModalCardsPackGrope } from './formModalCardsPackGrope/FormModalCardsPackGrope'
+
+export { FormDelete } from './formDelete/FormDelete'
+
+export { Grade } from './grade/Grade'
+
+export { ChangeLogin } from './changeLogin/ChangeLogin'
+
+export { FormCardEditAndCreate } from './formCardEditAndCreate/FormCardEditAndCreate'

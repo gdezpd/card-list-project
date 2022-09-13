@@ -11,6 +11,7 @@ export const loginAPI = {
       AxiosResponse<UserResponseType, LoginType>,
       LoginType
     >(`${PathAPI.Auth}${PathAPI.Login}`, { password, rememberMe, email })
+
     return response.data
   },
 
@@ -18,6 +19,7 @@ export const loginAPI = {
     const response = await API_CONFIG.delete<any, AxiosResponse<LoginOutResponseType>>(
       `${PathAPI.Auth}${PathAPI.Me}`
     )
+
     return response.data
   },
 }

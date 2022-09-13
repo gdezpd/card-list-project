@@ -1,14 +1,20 @@
 //slice
 
-import exp from 'constants'
-
 export { appSlice } from './slice/appSlice'
 export { forgotSlice } from './slice/forgotSlice'
 export { registrationSlice } from './slice/registrationSlice'
 export { profileSlice } from './slice/profileSlice'
-export { packParamsSlice, initialStatePackParams } from './slice/packParamsSlice'
+export {
+  packParamsSlice,
+  initialStatePackParams,
+  resetStatePackParams,
+} from './slice/packParamsSlice'
 export { packSlice } from './slice/packSlice'
-export { cardParamsSlice, initialStateCardParams } from './slice/cardParamsSlice'
+export {
+  cardParamsSlice,
+  initialStateCardParams,
+  resetStateCardParams,
+} from './slice/cardParamsSlice'
 export { cardSlice } from './slice/cardSlice'
 
 //thunk
@@ -16,8 +22,9 @@ export { cardSlice } from './slice/cardSlice'
 export { sendLetterOnEmail, sendNewPassword } from './thunk/forgotThunk'
 export { RegistrationThunk } from './thunk/registrationThunk'
 export { fetchProfilePage, changeProfileName, logoutUser } from './thunk/profileThunk'
-export { getPackData } from './thunk/pakcThunk'
-export { getCardData } from './thunk/cardThunk'
+export { getPackData, addNewPack, editPack, deletePack } from './thunk/packThunk'
+export { getCardData, deleteCard, editCard, addNewCard } from './thunk/cardThunk'
+export { authThunk } from './thunk/loginThunk'
 
 //selector
 
@@ -25,6 +32,7 @@ export {
   selectorCardData,
   selectorTotalCountCard,
   selectorTitlePack,
+  selectorPackUserId,
 } from './selectors/selectorsCard'
 
 export {
@@ -51,9 +59,14 @@ export {
   selectorError,
   selectorIsAuth,
   selectorWarningMessage,
+  selectorIsCloseModal,
 } from './selectors/selectorsApp'
 
-export { selectorCurrentPageCard, selectorParamsCard } from './selectors/selectorsCardParams'
+export {
+  selectorCurrentPageCard,
+  selectorParamsCard,
+  selectorCardQuestion,
+} from './selectors/selectorsCardParams'
 
 export {
   selectorCurrentPage,
@@ -79,6 +92,7 @@ export {
   removeErrorMessage,
   setAuth,
   setWarningMessage,
+  isCloseModal,
 } from './slice/appSlice'
 
 export { removeEmail, sendLetter, isPasswordSend } from './slice/forgotSlice'

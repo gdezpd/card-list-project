@@ -1,8 +1,7 @@
 import React, { SyntheticEvent } from 'react'
 
-import { ButtonUpload } from 'components'
+import { ButtonUpload, Modal } from 'components'
 import { useModal } from 'components/modal/hooks/useModal'
-import { Modal } from 'components/modal/Modal'
 import { useSelector } from 'react-redux'
 import { selectorAvatarUser } from 'store'
 
@@ -12,7 +11,7 @@ import style from './AvatarUser.module.sass'
 
 export const AvatarUser = () => {
   let avatar = useSelector(selectorAvatarUser)
-  const { onCloseModal, onOpenModal, isOpenModal } = useModal()
+  const [isOpenModal, onOpenModal, onCloseModal] = useModal()
 
   if (!avatar) {
     avatar = defaultAvatar
@@ -25,7 +24,7 @@ export const AvatarUser = () => {
   return (
     <div className={style.avatarUserWrapper}>
       <Modal onClose={onCloseModal} isOpen={isOpenModal}>
-        {<img src={avatar} alt="avatarUser" />}
+        <img src={avatar} alt="avatarUser" />
       </Modal>
       <img
         className={style.imgAvatar}

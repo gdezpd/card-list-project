@@ -11,6 +11,7 @@ export const registrationAPI = {
       AxiosResponse<RegistrationUserResponseType>,
       RegistrationType
     >(`${PathAPI.Auth}${PathAPI.Register}`, { email, password })
+
     return response.data
   },
 }

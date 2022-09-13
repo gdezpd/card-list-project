@@ -24,7 +24,9 @@ export const Header = () => {
     <header className={style.header}>
       <div className={styleMain.container}>
         <div className={style.headerContainer}>
-          <img className={style.logo} src={itIncubatorLogo} alt={'logo'} />
+          <a href="/Profile">
+            <img className={style.logo} src={itIncubatorLogo} alt={'logo'} />
+          </a>
           <div className={style.wrapper}>
             {!isAuth ? (
               <CustomButton color="primary" onClick={onClickRoute}>

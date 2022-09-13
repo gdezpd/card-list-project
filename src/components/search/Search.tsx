@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { CustomInput } from 'components/index'
+import { CustomInput } from 'components'
 import { useCustomInput } from 'components/input/customInput/hooks'
-import style from 'components/search/Search.module.sass'
 import { useDebounce } from 'hooks'
+
+import style from './Search.module.sass'
 
 type SearchType = {
   error: string
@@ -13,7 +14,8 @@ type SearchType = {
 }
 
 export const Search = ({ searchValue, onChangeDebounceValue, disabled, error }: SearchType) => {
-  const { value, onChange } = useCustomInput(searchValue)
+  const [value, onChange] = useCustomInput(searchValue)
+
   const debounceValue = useDebounce(value)
 
   useEffect(() => {

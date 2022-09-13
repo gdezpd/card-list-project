@@ -11,6 +11,8 @@ import { removeEmail, selectorIsLoading, selectorIsPasswordSend, sendNewPassword
 import { createErrorSchema } from 'utils'
 import * as yup from 'yup'
 
+const schema = yup.object().shape(createErrorSchema(['password']))
+
 export const ForgotCreatePassword = () => {
   const dispatch = useAppDispatch()
 
@@ -25,8 +27,6 @@ export const ForgotCreatePassword = () => {
   }
 
   const param = useParams<'token'>()
-
-  const schema = yup.object().shape(createErrorSchema(['password']))
 
   const formik = useFormik({
     initialValues: {
@@ -45,6 +45,7 @@ export const ForgotCreatePassword = () => {
 
   const errorPassword = formik.touched.password ? formik.errors.password : undefined
   const isDisabledButton = isLoading || !formik.isValid
+
   return (
     <FormBody width={410} height={370}>
       <Title text="Create new password" />

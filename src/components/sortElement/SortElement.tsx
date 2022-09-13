@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { IconSortElementSvg } from 'components/iconSVG/iconSortElementSVG/IconSortElementSVG'
 import { SortParamElementType, SortParamType } from 'types'
@@ -16,18 +16,17 @@ export type SortElementType = {
   stateSortElement: SortParamElementType
 }
 
-export const SortElement = React.memo(
-  ({ onSort, sortParam, stateSortElement }: SortElementType) => {
-    const { activeSortElement, onChangeSortElement } = useSortElement(
-      onSort,
-      sortParam,
-      stateSortElement
-    )
-    return (
-      <div className={style.sortElementWrapper} onClick={onChangeSortElement}>
-        <IconSortElementSvg rotate={false} isActive={activeSortElement[0]} />
-        <IconSortElementSvg rotate isActive={activeSortElement[1]} />
-      </div>
-    )
-  }
-)
+export const SortElement = memo(({ onSort, sortParam, stateSortElement }: SortElementType) => {
+  const { activeSortElement, onChangeSortElement } = useSortElement(
+    onSort,
+    sortParam,
+    stateSortElement
+  )
+
+  return (
+    <div className={style.sortElementWrapper} onClick={onChangeSortElement}>
+      <IconSortElementSvg rotate={false} isActive={activeSortElement[0]} />
+      <IconSortElementSvg rotate isActive={activeSortElement[1]} />
+    </div>
+  )
+})

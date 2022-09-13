@@ -1,32 +1,36 @@
 import React, { useState } from 'react'
 
-import { CustomButtonBox } from 'components/index'
-import { useAppDispatch } from 'hooks'
-import { useSelector } from 'react-redux'
-import { selectorIsLoading, selectorAuthUserId, setPackParams } from 'store'
+import { CustomButtonBox } from 'components'
 
 import style from './ButtonChoiceGrope.module.sass'
 
-export const ButtonChoiceGrope = () => {
-  const dispatch = useAppDispatch()
+type ButtonChoiceGropeType = {
+  onClickButton: (value: string) => void
+  disabled: boolean
+  authUserId: string
+  userIdParam: string
+}
 
-  const disabled = useSelector(selectorIsLoading)
-  const idUser = useSelector(selectorAuthUserId)
-
-  const [isUserCards, setIsUserCards] = useState<boolean>(false)
+export const ButtonChoiceGrope = ({
+  onClickButton,
+  disabled,
+  authUserId,
+  userIdParam,
+}: ButtonChoiceGropeType) => {
+  const [isUserCards, setIsUserCards] = useState<boolean>(!!userIdParam)
 
   const onClickUserButton = () => {
     if (!isUserCards) {
       setIsUserCards(true)
     }
-    dispatch(setPackParams({ user_id: idUser }))
+    onClickButton(authUserId)
   }
 
   const onClickAllButton = () => {
     if (isUserCards) {
       setIsUserCards(false)
     }
-    dispatch(setPackParams({ user_id: '' }))
+    onClickButton('')
   }
 
   return (

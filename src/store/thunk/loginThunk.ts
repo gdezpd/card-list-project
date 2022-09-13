@@ -10,6 +10,7 @@ export const authThunk = createAsyncThunk(
     try {
       dispatch(isSpinAppLoading(true))
       const res = await loginAPI.loginIn({ password, rememberMe, email })
+
       dispatch(setAuth(true))
       dispatch(setUserData(res))
     } catch (e) {

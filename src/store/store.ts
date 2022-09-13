@@ -6,11 +6,11 @@ import {
   forgotSlice,
   packParamsSlice,
   packSlice,
+  profileSlice,
   registrationSlice,
 } from 'store'
+import { learnSlice } from 'store/slice/learnSlice'
 import { resetSlice } from 'store/slice/resetSlice'
-
-import { profileSlice } from './slice/profileSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,11 +18,12 @@ export const store = configureStore({
     forgot: forgotSlice.reducer,
     registration: registrationSlice.reducer,
     profile: profileSlice.reducer,
+    reset: resetSlice.reducer,
     pack: packSlice.reducer,
     packParams: packParamsSlice.reducer,
-    reset: resetSlice.reducer,
     card: cardSlice.reducer,
     cardParams: cardParamsSlice.reducer,
+    learn: learnSlice.reducer,
   },
 })
 

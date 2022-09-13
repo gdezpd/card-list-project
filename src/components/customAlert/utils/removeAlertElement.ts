@@ -8,7 +8,9 @@ export const removeAlertElement = (
 ): AlertElementType[] | null => {
   if (alerts) {
     const newAlerts = alerts.filter((alert) => alert.id !== id)
+
     return newAlerts.length === 0 ? null : newAlerts
   }
+
   return null
 }

@@ -1,37 +1,43 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'antd/dist/antd.css'
 
 import { Pagination } from 'antd'
 import {
-  ButtonChoiceGrope,
-  ButtonResetFilter,
-  CustomSliderByPack,
-  FilterElementContainer,
-  Search,
+  FilterContainer,
+  FormModalPackListGrope,
+  Modal,
   TablePackList,
   TitleWithButton,
 } from 'components'
+import { useModal } from 'components/modal/hooks/useModal'
+import { Path } from 'enums'
 import { useAppDispatch } from 'hooks'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   getPackData,
-  initialStatePackParams,
   mountingComponent,
-  removeIsFirstOpenPage,
+  removePackData,
   resetPackParams,
   selectorCurrentPage,
+  selectorIsCloseModal,
   selectorIsLoading,
   selectorIsMounting,
   selectorParams,
   selectorTotalCount,
   setIsFirstOpenPage,
   setPackParams,
-  unmountingComponent,
 } from 'store'
+import { BackValueType } from 'types'
 
 import { TABLET_HEADER } from './optionHeaderTable/optionHeaderTable'
 import style from './РacksList.module.sass'
 
+type ModalPackDataType = {
+  packName: string
+  packId: string
+  action: BackValueType
+}
 export const PacksList = () => {
   const dispatch = useAppDispatch()
 
@@ -40,6 +46,17 @@ export const PacksList = () => {
   const currentPage = useSelector(selectorCurrentPage)
   const params = useSelector(selectorParams)
   const isMounting = useSelector(selectorIsMounting)
+  const isCloseModalPackAfterRequest = useSelector(selectorIsCloseModal)
+
+  const [modalPackData, setModalPackData] = useState<ModalPackDataType>({
+    packName: '',
+    packId: '',
+    action: '',
+  })
+
+  const navigate = useNavigate()
+
+  const [isOpenModal, onOpenModal, onCloseModal] = useModal()
 
   useEffect(() => {
     if (params.isFirstOpen) {
@@ -56,69 +73,84 @@ export const PacksList = () => {
 
   useEffect(() => {
     dispatch(setIsFirstOpenPage())
+
     return () => {
-      dispatch(removeIsFirstOpenPage())
+      dispatch(removePackData())
     }
   }, [])
 
-  const onchangePagination = (page: number, pageSize: number) => {
-    dispatch(setPackParams({ page: page }))
-    dispatch(setPackParams({ pageCount: pageSize }))
+  useEffect(() => {
+    if (isOpenModal && isCloseModalPackAfterRequest) {
+      onCloseModal()
+    }
+  }, [isCloseModalPackAfterRequest])
+
+  const onChangePagination = (page: number, pageSize: number) => {
+    dispatch(setPackParams({ page: page, pageCount: pageSize }))
   }
 
-  const onSearch = (searchValuer: string) => {
-    dispatch(setPackParams({ packName: searchValuer }))
+  const onOpenModalAddPack = () => {
+    onOpenModal()
+    setModalPackData({ packId: '', packName: '', action: 'add' })
   }
 
-  const onResetFilter = () => {
-    dispatch(unmountingComponent())
+  const onClickTableAction = (idPack: string, backValue: BackValueType, namePack: string) => {
+    switch (backValue) {
+      case 'edit':
+      case 'delete':
+        onOpenModal()
+
+        setModalPackData({
+          packId: idPack,
+          action: backValue,
+          packName: namePack,
+        })
+
+        break
+      case 'learn':
+        //navigate(`${Path.Learn}${Path.Root}${idPack}`)
+        break
+      case 'name':
+        navigate(`${Path.Pack}${Path.Root}${idPack}`)
+        break
+    }
   }
-
-  const onClockButton = () => {}
-
-  const errorSearchValue = totalPack ? '' : !params.packName ? '' : 'Cards not found'
 
   return (
     <div className={style.packWrapper}>
       <TitleWithButton
         titleText="PacksList list"
         buttonText="Add new pack"
-        onClick={onClockButton}
+        onClick={onOpenModalAddPack}
       />
+
       {!isMounting ? (
         <>
           <div className={style.filterElementWrapper}>
-            <FilterElementContainer title="Search">
-              <Search
-                searchValue={params.packName}
-                onChangeDebounceValue={onSearch}
-                disabled={isLoading}
-                error={errorSearchValue}
-              />
-            </FilterElementContainer>
-            <FilterElementContainer title="Show packs cards">
-              <ButtonChoiceGrope />
-            </FilterElementContainer>
-            <FilterElementContainer title="Number of cards">
-              <CustomSliderByPack />
-            </FilterElementContainer>
-            <FilterElementContainer>
-              <ButtonResetFilter onResetFilter={onResetFilter} disable={isLoading} />
-            </FilterElementContainer>
+            <FilterContainer />
           </div>
-          <TablePackList headData={TABLET_HEADER} />
+          <TablePackList headData={TABLET_HEADER} onClickTableAction={onClickTableAction} />
           <div className={style.paginationWrapper}>
             <Pagination
               disabled={isLoading}
               showQuickJumper
               current={currentPage}
-              pageSize={initialStatePackParams.pageCount}
               total={totalPack}
-              onChange={onchangePagination}
+              onChange={onChangePagination}
             />
           </div>
         </>
       ) : null}
+
+      <Modal onClose={onCloseModal} isOpen={isOpenModal}>
+        <FormModalPackListGrope
+          onClose={onCloseModal}
+          isOpenModal={isOpenModal}
+          packId={modalPackData.packId}
+          action={modalPackData.action}
+          packName={modalPackData.packName}
+        />
+      </Modal>
     </div>
   )
 }
